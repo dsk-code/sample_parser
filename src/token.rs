@@ -13,8 +13,8 @@ impl Location {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Annotation<T> {
-    value: T,
-    loc: Location,
+    pub value: T,
+    pub loc: Location,
 }
 
 impl<T> Annotation<T> {
@@ -35,7 +35,7 @@ pub enum TokenKind {
 }
 
 pub type Token = Annotation<TokenKind>;
-
+    
 impl Token {
     pub fn number(n: u64, loc: Location) -> Self {
         Self::new(TokenKind::Number(n), loc)
