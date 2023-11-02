@@ -35,7 +35,7 @@ pub enum TokenKind {
 }
 
 pub type Token = Annotation<TokenKind>;
-    
+
 impl Token {
     pub fn number(n: u64, loc: Location) -> Self {
         Self::new(TokenKind::Number(n), loc)

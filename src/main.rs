@@ -1,6 +1,6 @@
-use token::{Location, Annotation};
+use token::{Annotation, Location};
 
-use crate::token::{Token, TokenKind, LexError, LexErrorKind};
+use crate::token::{LexError, LexErrorKind, Token, TokenKind};
 
 pub mod token;
 
