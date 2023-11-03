@@ -1,33 +1,33 @@
-use token::{Annotation, Location};
-
-use crate::token::{LexError, LexErrorKind, Token, TokenKind};
-
+pub mod lexer;
 pub mod token;
 
-pub mod lexer;
+use lexer::*;
+
+use std::io::{stdout, Write, stdin, BufRead, BufReader, Result};
+
+// プロンプトを表示しユーザーの入力を促す
+fn prompt(s: &str) -> Result<()> {
+    let stdout = stdout();
+    let mut stdout = stdout.lock();
+    stdout.write_all(s.as_bytes())?;
+    stdout.flush()
+}
 
 fn main() {
-    let location = Location(2, 6);
-    let location2 = Location(1, 5);
-    let location3 = location.merge(&location2);
-    println!("location = {:?}", location);
-    println!("location2 = {:?}", location2);
-    println!("location3 = {:?}", location3);
+    let stdin = stdin();
+    let stdin = stdin.lock();
+    let stdin = BufReader::new(stdin);
+    let mut lines = stdin.lines();
 
-    let annotation = Annotation::new("はい", location);
-    println!("annotation = {:?}", annotation);
-    println!("annotation.value = {:?}", annotation.value);
-
-    let number = Token::number(5, location2);
-    match number.value {
-        TokenKind::Number(x) => println!("number = {:?}", x),
-        _ => (),
+    loop {
+        prompt(">").unwrap();
+        // ユーザーの入力を取得する
+        if let Some(Ok(line)) = lines.next() {
+            // 字句解析を行う
+            let token = lex(&line);
+            println!("{:?}", token);
+        } else {
+            break;
+        }
     }
-
-    let lexerror = LexError::invalid_char('e', location3);
-    match lexerror.value {
-        LexErrorKind::InvalidChar(x) => println!("lexerror = {:?}", x),
-        _ => (),
-    }
-    // println!("number = {:?}", number.value);
 }
