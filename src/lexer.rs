@@ -244,6 +244,23 @@ mod tests {
     }
 
     #[test]
+    fn test_lex_number() {
+        let input = "1235()";
+        let test_input = input.as_bytes();
+        let test_position = 0;
+        let expected_results = Ok((
+            Annotation {
+                value: TokenKind::Number(1235),
+                loc: Location(0, 4),
+            },
+            4,
+        ));
+        let result = lex_number(test_input, test_position);
+        assert!(result.is_ok());
+        assert_eq!(expected_results, result);
+    }
+
+    #[test]
     fn test_recognize_many() {
         let input = "4789+++";
         let test_input = input.as_bytes();
