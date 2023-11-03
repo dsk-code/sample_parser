@@ -91,8 +91,9 @@ fn lex_number(input: &[u8], position: usize) -> Result<(Token, usize), LexError>
     Ok((Token::number(n, Location(start, end)), end))
 }
 
+// テストがループしていた理由は -- b" \n\t" -- が -- b"\n\t" -- になっていた。
 fn skip_spaces(input: &[u8], position: usize) -> Result<((), usize), LexError> {
-    let position = recognize_many(input, position, |b| b"\n\t".contains(&b));
+    let position = recognize_many(input, position, |b| b" \n\t".contains(&b));
     Ok(((), position))
 }
 
@@ -262,10 +263,10 @@ mod tests {
 
     #[test]
     fn test_skip_spaces() {
-        let input = "\n\t123";
+        let input = " \n\t123";
         let test_input = input.as_bytes();
         let test_position = 0;
-        let expected_results = Ok(((), 2));
+        let expected_results = Ok(((), 3));
         let result = skip_spaces(test_input, test_position);
         assert!(result.is_ok());
         assert_eq!(expected_results, result);
@@ -281,29 +282,21 @@ mod tests {
         let result = recognize_many(test_input, test_position, test_fn_contains);
         assert_eq!(expected_result, result);
     }
-    // #[test]
-    // fn test_lex_a_token_macro() {
-    //     let test_input = "123+";
 
-    //     fn dummy_fnction(input: &[u8], position: usize) -> Result<(Token, usize), LexError> {
-
-    //     }
-
-    // }
-    // #[test]
-    // fn test_lexer() {
-    //     assert_eq!(
-    //         lex("1 + 2 * 3 - - 10"),
-    //         Ok(vec![
-    //             Token::number(1, Location(0, 1)),
-    //             Token::plus(Location(2, 3)),
-    //             Token::number(2, Location(4, 5)),
-    //             Token::asterisk(Location(6, 7)),
-    //             Token::number(3, Location(8, 9)),
-    //             Token::minus(Location(10, 11)),
-    //             Token::minus(Location(12, 13)),
-    //             Token::number(10, Location(14, 16)),
-    //         ])
-    //     )
-    // }
+    #[test]
+    fn test_lexer() {
+        assert_eq!(
+            lex("1 + 2 * 3 - - 10"),
+            Ok(vec![
+                Token::number(1, Location(0, 1)),
+                Token::plus(Location(2, 3)),
+                Token::number(2, Location(4, 5)),
+                Token::asterisk(Location(6, 7)),
+                Token::number(3, Location(8, 9)),
+                Token::minus(Location(10, 11)),
+                Token::minus(Location(12, 13)),
+                Token::number(10, Location(14, 16)),
+            ])
+        )
+    }
 }
