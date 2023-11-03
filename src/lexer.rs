@@ -261,6 +261,17 @@ mod tests {
     }
 
     #[test]
+    fn test_skip_spaces() {
+        let input = "\n\t123";
+        let test_input = input.as_bytes();
+        let test_position = 0;
+        let expected_results = Ok(((), 2));
+        let result = skip_spaces(test_input, test_position);
+        assert!(result.is_ok());
+        assert_eq!(expected_results, result);
+    }
+
+    #[test]
     fn test_recognize_many() {
         let input = "4789+++";
         let test_input = input.as_bytes();
