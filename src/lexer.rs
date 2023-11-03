@@ -243,7 +243,16 @@ mod tests {
         assert_eq!(expected_results, result);
     }
 
-
+    #[test]
+    fn test_recognize_many() {
+        let input = "4789+++";
+        let test_input = input.as_bytes();
+        let test_position = 2;
+        let test_fn_contains = |x| b"1234567890".contains(&x);
+        let expected_result = 4;
+        let result = recognize_many(test_input, test_position, test_fn_contains);
+        assert_eq!(expected_result, result);
+    }
     // #[test]
     // fn test_lex_a_token_macro() {
     //     let test_input = "123+";
