@@ -1,10 +1,10 @@
+pub mod ast;
 pub mod lexer;
 pub mod token;
-pub mod ast;
 
 use lexer::*;
 
-use std::io::{stdout, Write, stdin, BufRead, BufReader, Result};
+use std::io::{stdin, stdout, BufRead, BufReader, Result, Write};
 
 // プロンプトを表示しユーザーの入力を促す
 fn prompt(s: &str) -> Result<()> {
