@@ -1,6 +1,6 @@
 use crate::token::{Annotation, Location, Token};
 
-// ASTを表すデータ型
+// 抽象構文木(AST)を表すデータ型
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Astkind {
     // 数値
@@ -86,7 +86,7 @@ pub enum BinaryOperationKind {
     Div,
 }
 
-type BinaryOperation = Annotation<BinaryOperationKind>;
+pub type BinaryOperation = Annotation<BinaryOperationKind>;
 
 impl BinaryOperation {
     pub fn add(loc: Location) -> Self {
@@ -167,35 +167,44 @@ mod tests {
     fn test_ast_binary_operation() {
         let test_binary_operation = BinaryOperation::add(Location(0, 2));
         let test_binary_operation_left = Ast::number(3, Location(4, 5));
-        let test_binary_operation_right = Ast::unary_operation(UnaryOperation::minus(Location(6, 7)), Ast::number(8, Location(9, 10)), Location(11, 12));
+        let test_binary_operation_right = Ast::unary_operation(
+            UnaryOperation::minus(Location(6, 7)),
+            Ast::number(8, Location(9, 10)),
+            Location(11, 12),
+        );
         let test_location = Location(13, 14);
         let expected_result = Annotation {
             value: Astkind::BinaryOperation {
                 operation: Annotation {
                     value: BinaryOperationKind::Add,
-                    loc: Location(0, 2)
+                    loc: Location(0, 2),
                 },
                 left: Box::new(Annotation {
                     value: Astkind::Number(3),
-                    loc: Location(4, 5)
+                    loc: Location(4, 5),
                 }),
                 right: Box::new(Annotation {
                     value: Astkind::UnaryOperation {
                         operation: Annotation {
                             value: UnaryOperationKind::Minus,
-                            loc: Location(6, 7)
+                            loc: Location(6, 7),
                         },
                         expression: Box::new(Annotation {
                             value: Astkind::Number(8),
-                            loc: Location(9, 10)
-                        })
+                            loc: Location(9, 10),
+                        }),
                     },
-                    loc: Location(11, 12)
-                })
+                    loc: Location(11, 12),
+                }),
             },
-            loc: Location(13, 14)
+            loc: Location(13, 14),
         };
-        let result = Ast::binary_operation(test_binary_operation, test_binary_operation_left, test_binary_operation_right, test_location);
+        let result = Ast::binary_operation(
+            test_binary_operation,
+            test_binary_operation_left,
+            test_binary_operation_right,
+            test_location,
+        );
         assert_eq!(expected_result, result);
     }
     #[test]

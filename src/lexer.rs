@@ -91,7 +91,7 @@ fn lex_number(input: &[u8], position: usize) -> Result<(Token, usize), LexError>
     Ok((Token::number(n, Location(start, end)), end))
 }
 
-// テストがループしていた理由は -- b" \n\t" -- が -- b"\n\t" -- になっていた。
+// テストがループしていた理由は skip_spaces()の -- b" \n\t" -- が -- b"\n\t" -- になっていた。
 fn skip_spaces(input: &[u8], position: usize) -> Result<((), usize), LexError> {
     let position = recognize_many(input, position, |b| b" \n\t".contains(&b));
     Ok(((), position))

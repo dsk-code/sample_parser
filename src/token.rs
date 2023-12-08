@@ -23,7 +23,7 @@ impl<T> Annotation<T> {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Copy)]
 pub enum TokenKind {
     Number(u64),
     Plus,
